@@ -1,0 +1,14 @@
+77cfdfd4ec76c1c865a33871c726dde2 *DESCRIPTION
+bbe281bdb9671d5d2d83f42fc2dbdf9f *LICENSE
+2579f993437d1299a1ba8000eeb08b83 *NAMESPACE
+189ac9c970e12d04bbaa3e0b83ed4318 *NEWS.md
+8405d7aa1c3de26e6526c9494c3eb6de *R/SelInd.R
+9f4495d86d662bccd893ead21043daa7 *R/methods.R
+c42fe302165fabe82de111b064324ebf *build/vignette.rds
+a9c79ac2eda9984f9115dce95ae95240 *inst/doc/CaseStudy.R
+fa8ea3545b484a52ffa03b04006b1bac *inst/doc/CaseStudy.Rmd
+2433f4a59a0e122efc06904c3ec658cb *inst/doc/CaseStudy.html
+94b545e4d57bbf43abb1b9bbd47dc159 *man/SelInd.Rd
+f59c02dfc0a3b679ea8f840974db3bea *man/print.SelInd.Rd
+6ffc32ebdd10d062911ea2127822e97c *man/summary.SelInd.Rd
+fa8ea3545b484a52ffa03b04006b1bac *vignettes/CaseStudy.Rmd

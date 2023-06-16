@@ -1,0 +1,331 @@
+---
+title: "Case Study"
+author:
+- Henner Simianer^1,2^, Johannes Heise^3^, Stefan Rensing^3^, Torsten Pook^1,2,4^, Johannes Geibel^1,2,5^, Christian Reimer^1,2,5^
+- ^1^ University of Goettingen, Department of Animal Sciences, Animal Breeding and Genetics Group
+- ^2^ University of Goettingen, Center for Integrated Breeding Research
+- ^3^ IT solutions for animal production (vit)
+- ^4^ Wageningen University and Research, Animal Breeding and Genomics Group
+- ^5^ Friedrich-Loeffler-Institut, Institute of Farm Animal genetics
+
+- 'E-Mail\: johannes.geibel@fli.de; hsimian@gwdg.de'
+
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{CaseStudy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+library(IndexWizard)
+```
+
+# The data
+
+The case study handles the situation in German Holstein Frisian (HF) breeding where the general Index (RZG) is based on several traits. The composition of the index changed in 2021, so that there are now eight instead of 6 traits in the index. Also, the exact trait definition was changed. In total, there are 10 "breeding goal traits". See [Simianer *et al.* "How economic weights translate into genetic and phenotypic progress, and vice versa" Genet Sel Evol 55, 38 (2023)](https://doi.org/10.1186/s12711-023-00807-0) for more details on it.
+
+The economic weights (`w`) of the indices are as follows, with traits not in the index having zero weight.
+
+```{r}
+tn <- c("RZM", "RZN", "RZEo", "RZEn", "RZR", "RZKm", "RZKd", "RZH", "RZC", "RZS")
+
+w_old <- c(0.45, 0.2, 0.15, 0, 0.1, 0.03, 0, 0, 0, 0.07)
+names(w_old) <- tn; w_old
+
+w_new <- c(0.36, 0.18, 0, 0.15, 0.07, 0.015, 0.015, 0.18, 0.03, 0)
+names(w_new) <- tn; w_old
+
+```
+
+Breeding values are scaled to a mean of 100 index points and a additive genetic standard deviation of 12 index points. This makes it easy to set up the genetic variance-covariance matrix ( $\Gamma = G$ ) from the genetic correlation matrix by simply multiplying the correlation matrix with a constant of 12^2^.
+
+```{r}
+G <- matrix(
+  c(1.0,0.13,0.13,0.07,-0.15,0.11,0.07,0.09,-0.02,0.04,
+    0.13,1.0,0.23,0.28,0.43,0.25,0.22,0.78,0.13,0.46,
+    0.13,0.23,1.0,0.92,0.02,0.09,-0.05,0.25,-0.1,0.19,
+    0.07,0.28,0.92,1.0,0.06,0.08,-.03,0.31,-.1,0.25,
+    -0.15,0.43,.02,0.06,1.0,0.32,0.19,0.41,0.04,0.15,
+    0.11,0.25,0.09,0.08,0.32,1.0,0.0,0.25,0.04,0.13,
+    0.07,0.22,-.05,-.03,0.19,0,1.0,0.23,0.05,0.10,
+    0.09,0.78,0.25,0.31,0.41,0.25,0.23,1.0,0.1,0.57,
+    -.02,0.13,-.10,-.1,0.04,0.04,0.05,0.1,1.0,0.02,
+    0.04,0.46,0.19,0.25,0.15,0.13,0.10,0.57,0.02,1.0)
+  ,byrow = TRUE, nrow = length(tn), ncol = length(tn), dimnames = list(tn, tn)
+)
+G <- G*12^2
+G
+```
+
+In our case, reliabilities ($r^2_{AI}$) of the estimated breeding values are available for all traits.
+
+```{r}
+r2 <- c(0.743, 0.673, 0.638, 0.717, 0.541, 0.635, 0.604, 0.720, 0.499, 0.764)
+names(r2) <- tn; r2
+
+```
+
+> Note: If you calculate an index for observed phenotypes based on own performances, the reliability ( $r^2$ ) equals the narrow sense heritability ( $h^2$ ).
+
+If we regard a situation where breeding value estimation is only performed for the actual index traits, $r^2$ needs to be subsetted.
+
+```{r}
+r2_old <- r2[w_old != 0]
+r2_new <- r2[w_new != 0]
+```
+
+For the case of the old index, estimates of the observed genetic gains of the traits in the index are available from evaluations of the HF breeding program.
+
+```{r}
+deltautr <- c(0.28401392, 0.21637703, 0.17932963, 0.09986764, 0.08767239, 0.13273939)
+names(deltautr) <- tn[w_old>0]
+
+```
+
+We may further need heritabilities ($h^2$) of the traits to translate genetic gain into phenotypic gain.
+
+```{r}
+h2 <- c(0.314, 0.090, 0.194, 0.194, 0.013, 0.049, 0.033, 0.061, 0.014, 0.273)
+names(h2) <- tn
+```
+
+Further, to allow residual errors to be correlated, we need a variance-covariance matrix of breeding values ($H$) as starting point for the internal estimation process.
+
+```{r}
+
+H <- matrix (
+  c(1.00,0.06,0.06,-.20,0.05,0.03,
+    0.06,1.00,0.14,0.40,0.20,0.46,
+    0.06,0.14,1.00,-.03,0.03,0.15,
+    -.20,0.40,-.03,1.00,0.30,0.13,
+    0.05,0.20,0.03,0.30,1.00,0.11,
+    0.03,0.46,0.15,0.13,0.11,1.00),
+  nrow=6, ncol=6,
+  dimnames = list(tn[w_old != 0], tn[w_old != 0]))
+H <- H * 144
+H
+```
+
+# Usage of the package `IndexWizard`
+
+```{r eval=FALSE, include=FALSE}
+library(IndexWizard)
+```
+
+All index calculations are performed within the function `SelInd()` . Minimum required input are `w`, `G` and `r2`. Note that all vectors and matrices need to be named to allow checks and sorting based on trait names.
+
+```{r}
+res <- SelInd(
+  w = w_old,
+  G = G,
+  r2 = r2_old
+)
+
+```
+
+The function by default informs the user, if certain calculations cannot be performed. This behavior can be silenced with setting `verbose = FALSE`.
+
+```{r}
+res <- SelInd(w = w_old,  G = G,  r2 = r2_old, verbose = FALSE)
+```
+
+The `summary()` function further gives information on the number of traits, and all available entries in the `SelInd` object.
+
+```{r}
+summary(res)
+```
+
+The `print()` function further re-formats the output to a more readable format, which includes rounding to two decimals. If you want to see the "pure" list, use `print.default()` instead.
+
+```{r}
+res
+```
+
+Nevertheless, each entry can also be extracted by the `$` operator.
+
+```{r}
+res$w
+res$b_scaled
+```
+
+# Case studies
+
+## Index weights
+
+The basic usage of the selection index would be the calculation of index weights (`b`) to combine several estimated breeding values to one combined selection criterium (`I`). We can do this for both of our indices as follows:
+
+```{r}
+res_old <- SelInd(w = w_old, G = G,  r2 = r2_old, verbose = FALSE)
+res_new <- SelInd(w = w_new, G = G,  r2 = r2_new, verbose = FALSE)
+```
+
+The according index weights would then be:
+
+```{r}
+round(res_old$b,2)
+round(res_new$b,2)
+```
+
+Let's assume an arbitrary individual with following estimated breeding values:
+
+```{r}
+
+ind <- c(RZM = 130, RZN = 110, RZEo = 105, RZEn = 106, RZR = 95,
+         RZKm = 100, RZKd = 101, RZH = 115,  RZC = 90,  RZS = 120)
+```
+
+The RZG_old of this animal would then be calculated as follows:
+
+```{r}
+t(res_old$b_scaled) %*% ind[names(res_old$b_scaled)]
+```
+
+The same individual would have a slightly lower RZG given the new index.
+
+```{r}
+t(res_new$b_scaled) %*% ind[names(res_new$b_scaled)]
+```
+
+## Expected composition of gain
+
+Further interest might be, how the index translates into genetic gain. We can derive the expected composition of the total genetic gain by extracting `d_G_exp_scaled`. This is scaled so that the sum of absolute values in the vector sum up to one. Note that genetic gain is also expected in breeding goal traits that are not part of the index as correlated selection response.
+
+```{r}
+res_old <- SelInd(w = w_old, G = G,  r2 = r2_old, verbose = FALSE)
+round(res_old$d_G_exp_scaled, 2)
+```
+
+Even though the expected phenotypic trend in natural units equals the expected genotypic trend in natural units, a comparison of phenotypes across traits would usually follow a scaling in phenotypic standard deviations to make traits comparable. Due to different heritabilities of the traits, this also leads to another composition of the genetic gain. To calculate the expected composition of the total phenotypic gain (`d_P_exp_scaled`), we need to pass also heritabilities to the function. In our example, the phenotypic gain depends relatively more on milk ("RZM") than the genetic gain, as milk comes with a higher heritability.
+
+```{r}
+h2
+res_old <- SelInd(w = w_old, G = G,  r2 = r2_old, h2 = h2, verbose = FALSE)
+round(res_old$d_P_exp_scaled, 2)
+```
+
+The total genetic gain further depends on the selection intensity (`i`). So if we are interested in the total genetic gain in genetic standard deviations (`dG`), we need to further assume a selection intensity.
+
+```{r}
+res_old <- SelInd(w = w_old, G = G,  r2 = r2_old, h2 = h2, i = 0.1, verbose = FALSE)
+round(res_old$dG, 2)
+```
+
+We can then also retrieve the expected gain for the single traits (`d_G_exp` or `d_P_exp`) scaled in genetic/ phenotypic standard deviations.
+
+```{r}
+round(res_old$d_G_exp, 2)
+round(res_old$d_P_exp, 2)
+```
+
+## Changes in expected gain
+
+Of strong practical interest should be the question how the genetic gain changes when the index is changed. This question can either be answered by comparison of different indices, or by calculation of analytic measures.
+
+### Comparison of indices
+
+We will first regard a situation where we not only have a numeric change in the economic weights, but also a discrete change in the index traits. Traits in `w`, but not in `r2` have an economic weight of zero, which allows to calculate information on the indirect response through correlations to index traits.
+
+```{r}
+res_old <- SelInd(w = w_old, G = G,  r2 = r2_old, h2 = h2, verbose = FALSE)
+res_new <- SelInd(w = w_new, G = G,  r2 = r2_new, h2 = h2, verbose = FALSE)
+
+```
+
+This then allows to compare the changes between the two indices, and we see that the total gain will be slightly less due to milk ("RZM"), but more due to gain in functional traits.
+
+```{r}
+round(res_new$d_G_exp_scaled - res_old$d_G_exp_scaled,2)
+```
+
+The same can also be done for the phenotypic trend, where this effect is even stronger due to the higher heritability of Milk.
+
+```{r}
+round(res_new$d_P_exp_scaled - res_old$d_P_exp_scaled,2)
+```
+
+### Use of analytic measures
+
+If we have a certain index and want to see which effect the single traits have on the composition of the total index, several analytic measures might help.
+
+```{r}
+res_old <- SelInd(w = w_old, G = G,  r2 = r2_old, verbose = FALSE)
+```
+
+First one would be the correlation between the overall index $I$ and a phenotype in trait $j$ ($r_{I,y_j}$; `r_IP` ). It reflects, to what extent a trait contributes to the response in overall genetic merit.
+
+```{r}
+round(res_old$r_IP, 2)
+```
+
+Second one is the loss of accuracy of prediction if trait $j$ is omitted from the index ($\frac{r_{IH_{-j}}}{r_{IH}}$; `r_IH`), which reflects the contribution of trait $j$ to the overall selection objective.
+
+```{r}
+round(res_old$r_IH, 2)
+```
+
+Further, the first derivative of $d$ with respect to $w$ ($\frac{\delta d}{\delta w}$; `del_d_scaled`) tells us how a change in the economic weight in some trait would affect the composition of the genetic trend. Note that the values are scaled so that the sum of the absolute values within a row sums up to one. The first row thereby tells us that a change of the weight for "RZM" mainly affects the gain in "RZM", but only moderately affects the functional traits. A change in the weight for "RZN" (second row) also indirectly affects e.g. "RZR".
+
+```{r}
+round(res_old$del_d_scaled, 2)
+```
+
+> Since V0.2.0.0, we calculate an approximate derivative by incrementing the weight of one trait slightly, while reducing the weight of the other traits accordingly, to be able to account for the side restriction that $\sum w = 0$.
+
+## Realized gain
+
+A further interesting feature of the method is to compare the expected composition of the gain with the observed genetic trend. Note that we subset `w` and `G` to the index traits, to have a matching scaling.
+
+```{r}
+res_old <- SelInd(w = w_old[w_old>0], G = G[w_old>0,w_old>0],  r2 = r2_old, verbose = FALSE)
+round(deltautr - res_old$d_G_exp_scaled, 3)
+
+```
+
+This shows us that the resulting trend matches the expected well with probably slightly more weight on exterior ("RZEo") and reproduction ("RZR").
+
+We can also check what this meant for the economic and index weights by calculating "realized weights" given the observed gains
+
+```{r}
+res_old <- SelInd(
+  w = w_old[w_old>0],
+  G = G[w_old>0, w_old>0],
+  r2 = r2_old,
+  d_G_obs = deltautr,
+  verbose = FALSE)
+round(res_old$w_real - res_old$w, 2)
+round(res_old$b_real - res_old$b_scaled, 2)
+```
+
+This reveals that there was effectively slightly more weight on "RZEo" and "RZR" in practical breeding decisions than suggested by the index.
+
+## Correlated residuals
+
+The previous section assumed uncorrelated residual errors, which might not hold in reality. `SelInd()` therefore also allows to include the residual variance-covariance matrix of the traits (`H`).
+
+```{r}
+res_old_corRes <- SelInd(
+  w = w_old[w_old>0],
+  G = G[w_old>0, w_old>0],
+  r2 = r2_old,
+  d_G_obs = deltautr,
+  H = H,
+  verbose = FALSE)
+```
+
+Modelling those residual correlations between the traits actually increases the fit between expectation and observation:
+
+```{r}
+round(res_old$w_real - res_old$w, 2) # uncorrelated residuals
+round(res_old_corRes$w_real - res_old_corRes$w, 2) # correlated residuals
+```

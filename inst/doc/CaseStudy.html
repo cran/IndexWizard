@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Henner Simianer1,2, Johannes Heise3, Stefan Rensing3, Torsten Pook1,2,4, Johannes Geibel1,2,5, Christian Reimer1,2,5" />
+<meta name="author" content="1 University of Goettingen, Department of Animal Sciences, Animal Breeding and Genetics Group" />
+<meta name="author" content="2 University of Goettingen, Center for Integrated Breeding Research" />
+<meta name="author" content="3 IT solutions for animal production (vit)" />
+<meta name="author" content="4 Wageningen University and Research, Animal Breeding and Genomics Group" />
+<meta name="author" content="5 Friedrich-Loeffler-Institut, Institute of Farm Animal genetics" />
+<meta name="author" content="E-Mail: johannes.geibel@fli.de; hsimian@gwdg.de" />
+
+
+<title>Case Study</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Case Study</h1>
+<h4 class="author">Henner Simianer<sup>1,2</sup>, Johannes
+Heise<sup>3</sup>, Stefan Rensing<sup>3</sup>, Torsten
+Pook<sup>1,2,4</sup>, Johannes Geibel<sup>1,2,5</sup>, Christian
+Reimer<sup>1,2,5</sup></h4>
+<h4 class="author"><sup>1</sup> University of Goettingen, Department of
+Animal Sciences, Animal Breeding and Genetics Group</h4>
+<h4 class="author"><sup>2</sup> University of Goettingen, Center for
+Integrated Breeding Research</h4>
+<h4 class="author"><sup>3</sup> IT solutions for animal production
+(vit)</h4>
+<h4 class="author"><sup>4</sup> Wageningen University and Research,
+Animal Breeding and Genomics Group</h4>
+<h4 class="author"><sup>5</sup> Friedrich-Loeffler-Institut, Institute
+of Farm Animal genetics</h4>
+<h4 class="author">E-Mail: <a href="mailto:johannes.geibel@fli.de" class="email">johannes.geibel@fli.de</a>; <a href="mailto:hsimian@gwdg.de" class="email">hsimian@gwdg.de</a></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#the-data" id="toc-the-data"><span class="toc-section-number">1</span> The data</a></li>
+<li><a href="#usage-of-the-package-indexwizard" id="toc-usage-of-the-package-indexwizard"><span class="toc-section-number">2</span> Usage of the package
+<code>IndexWizard</code></a></li>
+<li><a href="#case-studies" id="toc-case-studies"><span class="toc-section-number">3</span> Case studies</a>
+<ul>
+<li><a href="#index-weights" id="toc-index-weights"><span class="toc-section-number">3.1</span> Index weights</a></li>
+<li><a href="#expected-composition-of-gain" id="toc-expected-composition-of-gain"><span class="toc-section-number">3.2</span> Expected composition of
+gain</a></li>
+<li><a href="#changes-in-expected-gain" id="toc-changes-in-expected-gain"><span class="toc-section-number">3.3</span> Changes in expected gain</a>
+<ul>
+<li><a href="#comparison-of-indices" id="toc-comparison-of-indices"><span class="toc-section-number">3.3.1</span> Comparison of indices</a></li>
+<li><a href="#use-of-analytic-measures" id="toc-use-of-analytic-measures"><span class="toc-section-number">3.3.2</span> Use of analytic
+measures</a></li>
+</ul></li>
+<li><a href="#realized-gain" id="toc-realized-gain"><span class="toc-section-number">3.4</span> Realized gain</a></li>
+<li><a href="#correlated-residuals" id="toc-correlated-residuals"><span class="toc-section-number">3.5</span> Correlated residuals</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="the-data" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> The data</h1>
+<p>The case study handles the situation in German Holstein Frisian (HF)
+breeding where the general Index (RZG) is based on several traits. The
+composition of the index changed in 2021, so that there are now eight
+instead of 6 traits in the index. Also, the exact trait definition was
+changed. In total, there are 10 “breeding goal traits”. See <a href="https://doi.org/10.1186/s12711-023-00807-0">Simianer <em>et
+al.</em> “How economic weights translate into genetic and phenotypic
+progress, and vice versa” Genet Sel Evol 55, 38 (2023)</a> for more
+details on it.</p>
+<p>The economic weights (<code>w</code>) of the indices are as follows,
+with traits not in the index having zero weight.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tn <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;RZM&quot;</span>, <span class="st">&quot;RZN&quot;</span>, <span class="st">&quot;RZEo&quot;</span>, <span class="st">&quot;RZEn&quot;</span>, <span class="st">&quot;RZR&quot;</span>, <span class="st">&quot;RZKm&quot;</span>, <span class="st">&quot;RZKd&quot;</span>, <span class="st">&quot;RZH&quot;</span>, <span class="st">&quot;RZC&quot;</span>, <span class="st">&quot;RZS&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>w_old <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.45</span>, <span class="fl">0.2</span>, <span class="fl">0.15</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.03</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.07</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(w_old) <span class="ot">&lt;-</span> tn; w_old</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.45 0.20 0.15 0.00 0.10 0.03 0.00 0.00 0.00 0.07</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>w_new <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.36</span>, <span class="fl">0.18</span>, <span class="dv">0</span>, <span class="fl">0.15</span>, <span class="fl">0.07</span>, <span class="fl">0.015</span>, <span class="fl">0.015</span>, <span class="fl">0.18</span>, <span class="fl">0.03</span>, <span class="dv">0</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(w_new) <span class="ot">&lt;-</span> tn; w_old</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.45 0.20 0.15 0.00 0.10 0.03 0.00 0.00 0.00 0.07</span></span></code></pre></div>
+<p>Breeding values are scaled to a mean of 100 index points and a
+additive genetic standard deviation of 12 index points. This makes it
+easy to set up the genetic variance-covariance matrix ( <span class="math inline">\(\Gamma = G\)</span> ) from the genetic correlation
+matrix by simply multiplying the correlation matrix with a constant of
+12<sup>2</sup>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">1.0</span>,<span class="fl">0.13</span>,<span class="fl">0.13</span>,<span class="fl">0.07</span>,<span class="sc">-</span><span class="fl">0.15</span>,<span class="fl">0.11</span>,<span class="fl">0.07</span>,<span class="fl">0.09</span>,<span class="sc">-</span><span class="fl">0.02</span>,<span class="fl">0.04</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.13</span>,<span class="fl">1.0</span>,<span class="fl">0.23</span>,<span class="fl">0.28</span>,<span class="fl">0.43</span>,<span class="fl">0.25</span>,<span class="fl">0.22</span>,<span class="fl">0.78</span>,<span class="fl">0.13</span>,<span class="fl">0.46</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.13</span>,<span class="fl">0.23</span>,<span class="fl">1.0</span>,<span class="fl">0.92</span>,<span class="fl">0.02</span>,<span class="fl">0.09</span>,<span class="sc">-</span><span class="fl">0.05</span>,<span class="fl">0.25</span>,<span class="sc">-</span><span class="fl">0.1</span>,<span class="fl">0.19</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.07</span>,<span class="fl">0.28</span>,<span class="fl">0.92</span>,<span class="fl">1.0</span>,<span class="fl">0.06</span>,<span class="fl">0.08</span>,<span class="sc">-</span>.<span class="dv">03</span>,<span class="fl">0.31</span>,<span class="sc">-</span>.<span class="dv">1</span>,<span class="fl">0.25</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="fl">0.15</span>,<span class="fl">0.43</span>,.<span class="dv">02</span>,<span class="fl">0.06</span>,<span class="fl">1.0</span>,<span class="fl">0.32</span>,<span class="fl">0.19</span>,<span class="fl">0.41</span>,<span class="fl">0.04</span>,<span class="fl">0.15</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.11</span>,<span class="fl">0.25</span>,<span class="fl">0.09</span>,<span class="fl">0.08</span>,<span class="fl">0.32</span>,<span class="fl">1.0</span>,<span class="fl">0.0</span>,<span class="fl">0.25</span>,<span class="fl">0.04</span>,<span class="fl">0.13</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.07</span>,<span class="fl">0.22</span>,<span class="sc">-</span>.<span class="dv">05</span>,<span class="sc">-</span>.<span class="dv">03</span>,<span class="fl">0.19</span>,<span class="dv">0</span>,<span class="fl">1.0</span>,<span class="fl">0.23</span>,<span class="fl">0.05</span>,<span class="fl">0.10</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.09</span>,<span class="fl">0.78</span>,<span class="fl">0.25</span>,<span class="fl">0.31</span>,<span class="fl">0.41</span>,<span class="fl">0.25</span>,<span class="fl">0.23</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.57</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span>.<span class="dv">02</span>,<span class="fl">0.13</span>,<span class="sc">-</span>.<span class="dv">10</span>,<span class="sc">-</span>.<span class="dv">1</span>,<span class="fl">0.04</span>,<span class="fl">0.04</span>,<span class="fl">0.05</span>,<span class="fl">0.1</span>,<span class="fl">1.0</span>,<span class="fl">0.02</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.04</span>,<span class="fl">0.46</span>,<span class="fl">0.19</span>,<span class="fl">0.25</span>,<span class="fl">0.15</span>,<span class="fl">0.13</span>,<span class="fl">0.10</span>,<span class="fl">0.57</span>,<span class="fl">0.02</span>,<span class="fl">1.0</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ,<span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="fu">length</span>(tn), <span class="at">ncol =</span> <span class="fu">length</span>(tn), <span class="at">dimnames =</span> <span class="fu">list</span>(tn, tn)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> G<span class="sc">*</span><span class="dv">12</span><span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>G</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         RZM    RZN   RZEo   RZEn    RZR   RZKm   RZKd    RZH    RZC    RZS</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZM  144.00  18.72  18.72  10.08 -21.60  15.84  10.08  12.96  -2.88   5.76</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZN   18.72 144.00  33.12  40.32  61.92  36.00  31.68 112.32  18.72  66.24</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEo  18.72  33.12 144.00 132.48   2.88  12.96  -7.20  36.00 -14.40  27.36</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEn  10.08  40.32 132.48 144.00   8.64  11.52  -4.32  44.64 -14.40  36.00</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZR  -21.60  61.92   2.88   8.64 144.00  46.08  27.36  59.04   5.76  21.60</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKm  15.84  36.00  12.96  11.52  46.08 144.00   0.00  36.00   5.76  18.72</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKd  10.08  31.68  -7.20  -4.32  27.36   0.00 144.00  33.12   7.20  14.40</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZH   12.96 112.32  36.00  44.64  59.04  36.00  33.12 144.00  14.40  82.08</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZC   -2.88  18.72 -14.40 -14.40   5.76   5.76   7.20  14.40 144.00   2.88</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZS    5.76  66.24  27.36  36.00  21.60  18.72  14.40  82.08   2.88 144.00</span></span></code></pre></div>
+<p>In our case, reliabilities (<span class="math inline">\(r^2_{AI}\)</span>) of the estimated breeding
+values are available for all traits.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.743</span>, <span class="fl">0.673</span>, <span class="fl">0.638</span>, <span class="fl">0.717</span>, <span class="fl">0.541</span>, <span class="fl">0.635</span>, <span class="fl">0.604</span>, <span class="fl">0.720</span>, <span class="fl">0.499</span>, <span class="fl">0.764</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(r2) <span class="ot">&lt;-</span> tn; r2</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo  RZEn   RZR  RZKm  RZKd   RZH   RZC   RZS </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.743 0.673 0.638 0.717 0.541 0.635 0.604 0.720 0.499 0.764</span></span></code></pre></div>
+<blockquote>
+<p>Note: If you calculate an index for observed phenotypes based on own
+performances, the reliability ( <span class="math inline">\(r^2\)</span>
+) equals the narrow sense heritability ( <span class="math inline">\(h^2\)</span> ).</p>
+</blockquote>
+<p>If we regard a situation where breeding value estimation is only
+performed for the actual index traits, <span class="math inline">\(r^2\)</span> needs to be subsetted.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>r2_old <span class="ot">&lt;-</span> r2[w_old <span class="sc">!=</span> <span class="dv">0</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>r2_new <span class="ot">&lt;-</span> r2[w_new <span class="sc">!=</span> <span class="dv">0</span>]</span></code></pre></div>
+<p>For the case of the old index, estimates of the observed genetic
+gains of the traits in the index are available from evaluations of the
+HF breeding program.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>deltautr <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.28401392</span>, <span class="fl">0.21637703</span>, <span class="fl">0.17932963</span>, <span class="fl">0.09986764</span>, <span class="fl">0.08767239</span>, <span class="fl">0.13273939</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(deltautr) <span class="ot">&lt;-</span> tn[w_old<span class="sc">&gt;</span><span class="dv">0</span>]</span></code></pre></div>
+<p>We may further need heritabilities (<span class="math inline">\(h^2\)</span>) of the traits to translate genetic
+gain into phenotypic gain.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.314</span>, <span class="fl">0.090</span>, <span class="fl">0.194</span>, <span class="fl">0.194</span>, <span class="fl">0.013</span>, <span class="fl">0.049</span>, <span class="fl">0.033</span>, <span class="fl">0.061</span>, <span class="fl">0.014</span>, <span class="fl">0.273</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(h2) <span class="ot">&lt;-</span> tn</span></code></pre></div>
+<p>Further, to allow residual errors to be correlated, we need a
+variance-covariance matrix of breeding values (<span class="math inline">\(H\)</span>) as starting point for the internal
+estimation process.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>H <span class="ot">&lt;-</span> <span class="fu">matrix</span> (</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fl">1.00</span>,<span class="fl">0.06</span>,<span class="fl">0.06</span>,<span class="sc">-</span>.<span class="dv">20</span>,<span class="fl">0.05</span>,<span class="fl">0.03</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.06</span>,<span class="fl">1.00</span>,<span class="fl">0.14</span>,<span class="fl">0.40</span>,<span class="fl">0.20</span>,<span class="fl">0.46</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.06</span>,<span class="fl">0.14</span>,<span class="fl">1.00</span>,<span class="sc">-</span>.<span class="dv">03</span>,<span class="fl">0.03</span>,<span class="fl">0.15</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span>.<span class="dv">20</span>,<span class="fl">0.40</span>,<span class="sc">-</span>.<span class="dv">03</span>,<span class="fl">1.00</span>,<span class="fl">0.30</span>,<span class="fl">0.13</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.05</span>,<span class="fl">0.20</span>,<span class="fl">0.03</span>,<span class="fl">0.30</span>,<span class="fl">1.00</span>,<span class="fl">0.11</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.03</span>,<span class="fl">0.46</span>,<span class="fl">0.15</span>,<span class="fl">0.13</span>,<span class="fl">0.11</span>,<span class="fl">1.00</span>),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow=</span><span class="dv">6</span>, <span class="at">ncol=</span><span class="dv">6</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(tn[w_old <span class="sc">!=</span> <span class="dv">0</span>], tn[w_old <span class="sc">!=</span> <span class="dv">0</span>]))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>H <span class="ot">&lt;-</span> H <span class="sc">*</span> <span class="dv">144</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>H</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         RZM    RZN   RZEo    RZR   RZKm    RZS</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZM  144.00   8.64   8.64 -28.80   7.20   4.32</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZN    8.64 144.00  20.16  57.60  28.80  66.24</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEo   8.64  20.16 144.00  -4.32   4.32  21.60</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZR  -28.80  57.60  -4.32 144.00  43.20  18.72</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKm   7.20  28.80   4.32  43.20 144.00  15.84</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZS    4.32  66.24  21.60  18.72  15.84 144.00</span></span></code></pre></div>
+</div>
+<div id="usage-of-the-package-indexwizard" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Usage of the package
+<code>IndexWizard</code></h1>
+<p>All index calculations are performed within the function
+<code>SelInd()</code> . Minimum required input are <code>w</code>,
+<code>G</code> and <code>r2</code>. Note that all vectors and matrices
+need to be named to allow checks and sorting based on trait names.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">w =</span> w_old,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">G =</span> G,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">r2 =</span> r2_old</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - only reliabilities given</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   --&gt; setting up E based on r2 and G</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   --&gt; residual errors are assumed to be uncorrelated!</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - no selection intensity provided</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   --&gt; can only compute the relative genetic and phenotypic trend</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - no heritabilities provided</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   --&gt; cannot compute the expected relative phenotypic trend</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - No observed composition of genetic progress given</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   --&gt; cannot calculate realized weights</span></span></code></pre></div>
+<p>The function by default informs the user, if certain calculations
+cannot be performed. This behavior can be silenced with setting
+<code>verbose = FALSE</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old,  <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>The <code>summary()</code> function further gives information on the
+number of traits, and all available entries in the <code>SelInd</code>
+object.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; An object of class SelInd. The index is based on:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - n = 10 breeding goal traits</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - 6 traits with economic weight != 0</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - m = 6 index traits</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residual errors were assumed to be uncorrelated.</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The SelInd object contains the entries w, G, E, r2, b, b_scaled, var_I, d_G_exp_scaled, r_IP, r_IH, del_d_scaled, delta, D, del_d_abs.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The SelInd object does not contain the entries H, h2, w_real, b_real, i, d_G_obs, d_G_exp, d_P_exp, d_P_exp_scaled, dG.</span></span></code></pre></div>
+<p>The <code>print()</code> function further re-formats the output to a
+more readable format, which includes rounding to two decimals. If you
+want to see the “pure” list, use <code>print.default()</code>
+instead.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>res</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; An object of class SelInd. The index is based on:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - n = 10 breeding goal traits</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - 6 traits with economic weight != 0</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - m = 6 index traits</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Matrices G, E present in SelInd object, but not printed to reduce complexity.</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Extract them by the use of the `$` operator.</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Vaiance of the index (`var_I`), expected genetic gain (`dG`)</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; and assumed selection intensity (`i`):</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $var_I:</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 41.29</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Economic (`w`) and index weights (`b`). Potentially they are rescaled (`scaled`)</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; so that sum(abs()) = 1. The weights might represent realized (`real`) weights</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; based on an observed composition of the genetic trend:</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $w:</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.45 0.20 0.15 0.00 0.10 0.03 0.00 0.00 0.00 0.07 </span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $b:</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.45 0.24 0.17 0.09 0.07 0.11 </span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $b_scaled:</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.40 0.21 0.15 0.08 0.06 0.09 </span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; reliabilities (`r2`) and heritabilities (`h2`) of the traits:</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $r2:</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.74 0.67 0.64 0.54 0.64 0.76 </span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Composition (`d`) of genetic (`G`) / phenotypic (`P`) trend.</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The composition might be observed (`obs`) or expected (`exp`).</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The composition might be scaled (`scaled`) so that sum(abs()) = 1:</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $d_G_exp_scaled:</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.20 0.16 0.11 0.10 0.05 0.08 0.04 0.14 0.00 0.11 </span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Analytic measures:</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Correlation between the overall index and the phenotype of trait j (`r_IP`) and</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; the loss in prediction accuracy when omitting trait j from the index (`r_IH`).</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Further the approximate first derivative of d_G_exp with respect to w (`del_d_scaled`) with rows</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; being scaled  so that sum(abs()) = 1.</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $r_IP:</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.80 0.68 0.49 0.25 0.37 0.43 </span></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $r_IH:</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.30 0.05 0.03 0.01 0.01 0.01 </span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $del_d_scaled:</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        RZM   RZN  RZEo  RZEn   RZR  RZKm  RZKd   RZH   RZC   RZS</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZM   0.15 -0.15 -0.09 -0.10 -0.14 -0.06 -0.02 -0.14 -0.01 -0.13</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZN  -0.16  0.23 -0.01  0.02  0.15  0.04  0.05  0.18  0.04  0.12</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEo -0.11 -0.01  0.36  0.33 -0.03 -0.02 -0.05  0.02 -0.05  0.02</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEn -0.13  0.03  0.33  0.31 -0.01 -0.02 -0.04  0.05 -0.04  0.06</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZR  -0.14  0.15 -0.02  0.00  0.31  0.12  0.05  0.13  0.02  0.04</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKm -0.09  0.06 -0.03 -0.02  0.19  0.49 -0.01  0.07  0.02  0.01</span></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKd -0.08  0.16 -0.13 -0.10  0.18 -0.03  0.07  0.13  0.04  0.08</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZH  -0.15  0.19  0.01  0.04  0.14  0.05  0.04  0.17  0.03  0.18</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZC  -0.06  0.19 -0.16 -0.13  0.11  0.07  0.05  0.12  0.06  0.04</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZS  -0.14  0.13  0.02  0.05  0.05  0.01  0.02  0.19  0.01  0.39</span></span></code></pre></div>
+<p>Nevertheless, each entry can also be extracted by the <code>$</code>
+operator.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>w</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.45 0.20 0.15 0.00 0.10 0.03 0.00 0.00 0.00 0.07</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>b_scaled</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        RZM        RZN       RZEo        RZR       RZKm        RZS </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.39887304 0.20882509 0.15191062 0.08378771 0.06243987 0.09416367</span></span></code></pre></div>
+</div>
+<div id="case-studies" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Case studies</h1>
+<div id="index-weights" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Index weights</h2>
+<p>The basic usage of the selection index would be the calculation of
+index weights (<code>b</code>) to combine several estimated breeding
+values to one combined selection criterium (<code>I</code>). We can do
+this for both of our indices as follows:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res_new <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_new, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_new, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>The according index weights would then be:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>b,<span class="dv">2</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.45 0.24 0.17 0.09 0.07 0.11</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_new<span class="sc">$</span>b,<span class="dv">2</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEn  RZR RZKm RZKd  RZH  RZC </span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.36 0.22 0.17 0.07 0.05 0.04 0.23 0.03</span></span></code></pre></div>
+<p>Let’s assume an arbitrary individual with following estimated
+breeding values:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">RZM =</span> <span class="dv">130</span>, <span class="at">RZN =</span> <span class="dv">110</span>, <span class="at">RZEo =</span> <span class="dv">105</span>, <span class="at">RZEn =</span> <span class="dv">106</span>, <span class="at">RZR =</span> <span class="dv">95</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">RZKm =</span> <span class="dv">100</span>, <span class="at">RZKd =</span> <span class="dv">101</span>, <span class="at">RZH =</span> <span class="dv">115</span>,  <span class="at">RZC =</span> <span class="dv">90</span>,  <span class="at">RZS =</span> <span class="dv">120</span>)</span></code></pre></div>
+<p>The RZG_old of this animal would then be calculated as follows:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_old<span class="sc">$</span>b_scaled) <span class="sc">%*%</span> ind[<span class="fu">names</span>(res_old<span class="sc">$</span>b_scaled)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          [,1]</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 116.2783</span></span></code></pre></div>
+<p>The same individual would have a slightly lower RZG given the new
+index.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_new<span class="sc">$</span>b_scaled) <span class="sc">%*%</span> ind[<span class="fu">names</span>(res_new<span class="sc">$</span>b_scaled)]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          [,1]</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 114.4104</span></span></code></pre></div>
+</div>
+<div id="expected-composition-of-gain" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Expected composition
+of gain</h2>
+<p>Further interest might be, how the index translates into genetic
+gain. We can derive the expected composition of the total genetic gain
+by extracting <code>d_G_exp_scaled</code>. This is scaled so that the
+sum of absolute values in the vector sum up to one. Note that genetic
+gain is also expected in breeding goal traits that are not part of the
+index as correlated selection response.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>d_G_exp_scaled, <span class="dv">2</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.20 0.16 0.11 0.10 0.05 0.08 0.04 0.14 0.00 0.11</span></span></code></pre></div>
+<p>Even though the expected phenotypic trend in natural units equals the
+expected genotypic trend in natural units, a comparison of phenotypes
+across traits would usually follow a scaling in phenotypic standard
+deviations to make traits comparable. Due to different heritabilities of
+the traits, this also leads to another composition of the genetic gain.
+To calculate the expected composition of the total phenotypic gain
+(<code>d_P_exp_scaled</code>), we need to pass also heritabilities to
+the function. In our example, the phenotypic gain depends relatively
+more on milk (“RZM”) than the genetic gain, as milk comes with a higher
+heritability.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>h2</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo  RZEn   RZR  RZKm  RZKd   RZH   RZC   RZS </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.314 0.090 0.194 0.194 0.013 0.049 0.033 0.061 0.014 0.273</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">h2 =</span> h2, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>d_P_exp_scaled, <span class="dv">2</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.29 0.13 0.13 0.12 0.02 0.05 0.02 0.09 0.00 0.15</span></span></code></pre></div>
+<p>The total genetic gain further depends on the selection intensity
+(<code>i</code>). So if we are interested in the total genetic gain in
+genetic standard deviations (<code>dG</code>), we need to further assume
+a selection intensity.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">h2 =</span> h2, <span class="at">i =</span> <span class="fl">0.1</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>dG, <span class="dv">2</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.64</span></span></code></pre></div>
+<p>We can then also retrieve the expected gain for the single traits
+(<code>d_G_exp</code> or <code>d_P_exp</code>) scaled in genetic/
+phenotypic standard deviations.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>d_G_exp, <span class="dv">2</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.83 0.67 0.47 0.44 0.22 0.35 0.16 0.58 0.02 0.45</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>d_P_exp, <span class="dv">2</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo RZEn  RZR RZKm RZKd  RZH  RZC  RZS </span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.04 0.02 0.02 0.02 0.00 0.01 0.00 0.01 0.00 0.02</span></span></code></pre></div>
+</div>
+<div id="changes-in-expected-gain" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Changes in expected
+gain</h2>
+<p>Of strong practical interest should be the question how the genetic
+gain changes when the index is changed. This question can either be
+answered by comparison of different indices, or by calculation of
+analytic measures.</p>
+<div id="comparison-of-indices" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Comparison of
+indices</h3>
+<p>We will first regard a situation where we not only have a numeric
+change in the economic weights, but also a discrete change in the index
+traits. Traits in <code>w</code>, but not in <code>r2</code> have an
+economic weight of zero, which allows to calculate information on the
+indirect response through correlations to index traits.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">h2 =</span> h2, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>res_new <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_new, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_new, <span class="at">h2 =</span> h2, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>This then allows to compare the changes between the two indices, and
+we see that the total gain will be slightly less due to milk (“RZM”),
+but more due to gain in functional traits.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_new<span class="sc">$</span>d_G_exp_scaled <span class="sc">-</span> res_old<span class="sc">$</span>d_G_exp_scaled,<span class="dv">2</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo  RZEn   RZR  RZKm  RZKd   RZH   RZC   RZS </span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -0.06  0.01 -0.01  0.00  0.02 -0.01  0.02  0.03  0.01 -0.01</span></span></code></pre></div>
+<p>The same can also be done for the phenotypic trend, where this effect
+is even stronger due to the higher heritability of Milk.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_new<span class="sc">$</span>d_P_exp_scaled <span class="sc">-</span> res_old<span class="sc">$</span>d_P_exp_scaled,<span class="dv">2</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo  RZEn   RZR  RZKm  RZKd   RZH   RZC   RZS </span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -0.07  0.02  0.00  0.01  0.01  0.00  0.01  0.03  0.00  0.00</span></span></code></pre></div>
+</div>
+<div id="use-of-analytic-measures" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Use of analytic
+measures</h3>
+<p>If we have a certain index and want to see which effect the single
+traits have on the composition of the total index, several analytic
+measures might help.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old, <span class="at">G =</span> G,  <span class="at">r2 =</span> r2_old, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>First one would be the correlation between the overall index <span class="math inline">\(I\)</span> and a phenotype in trait <span class="math inline">\(j\)</span> (<span class="math inline">\(r_{I,y_j}\)</span>; <code>r_IP</code> ). It
+reflects, to what extent a trait contributes to the response in overall
+genetic merit.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>r_IP, <span class="dv">2</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.80 0.68 0.49 0.25 0.37 0.43</span></span></code></pre></div>
+<p>Second one is the loss of accuracy of prediction if trait <span class="math inline">\(j\)</span> is omitted from the index (<span class="math inline">\(\frac{r_{IH_{-j}}}{r_{IH}}\)</span>;
+<code>r_IH</code>), which reflects the contribution of trait <span class="math inline">\(j\)</span> to the overall selection objective.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>r_IH, <span class="dv">2</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  RZM  RZN RZEo  RZR RZKm  RZS </span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.30 0.05 0.03 0.01 0.01 0.01</span></span></code></pre></div>
+<p>Further, the first derivative of <span class="math inline">\(d\)</span> with respect to <span class="math inline">\(w\)</span> (<span class="math inline">\(\frac{\delta d}{\delta w}\)</span>;
+<code>del_d_scaled</code>) tells us how a change in the economic weight
+in some trait would affect the composition of the genetic trend. Note
+that the values are scaled so that the sum of the absolute values within
+a row sums up to one. The first row thereby tells us that a change of
+the weight for “RZM” mainly affects the gain in “RZM”, but only
+moderately affects the functional traits. A change in the weight for
+“RZN” (second row) also indirectly affects e.g. “RZR”.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>del_d_scaled, <span class="dv">2</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        RZM   RZN  RZEo  RZEn   RZR  RZKm  RZKd   RZH   RZC   RZS</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZM   0.15 -0.15 -0.09 -0.10 -0.14 -0.06 -0.02 -0.14 -0.01 -0.13</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZN  -0.16  0.23 -0.01  0.02  0.15  0.04  0.05  0.18  0.04  0.12</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEo -0.11 -0.01  0.36  0.33 -0.03 -0.02 -0.05  0.02 -0.05  0.02</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZEn -0.13  0.03  0.33  0.31 -0.01 -0.02 -0.04  0.05 -0.04  0.06</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZR  -0.14  0.15 -0.02  0.00  0.31  0.12  0.05  0.13  0.02  0.04</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKm -0.09  0.06 -0.03 -0.02  0.19  0.49 -0.01  0.07  0.02  0.01</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZKd -0.08  0.16 -0.13 -0.10  0.18 -0.03  0.07  0.13  0.04  0.08</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZH  -0.15  0.19  0.01  0.04  0.14  0.05  0.04  0.17  0.03  0.18</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZC  -0.06  0.19 -0.16 -0.13  0.11  0.07  0.05  0.12  0.06  0.04</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RZS  -0.14  0.13  0.02  0.05  0.05  0.01  0.02  0.19  0.01  0.39</span></span></code></pre></div>
+<blockquote>
+<p>Since V0.2.0.0, we calculate an approximate derivative by
+incrementing the weight of one trait slightly, while reducing the weight
+of the other traits accordingly, to be able to account for the side
+restriction that <span class="math inline">\(\sum w = 0\)</span>.</p>
+</blockquote>
+</div>
+</div>
+<div id="realized-gain" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Realized gain</h2>
+<p>A further interesting feature of the method is to compare the
+expected composition of the gain with the observed genetic trend. Note
+that we subset <code>w</code> and <code>G</code> to the index traits, to
+have a matching scaling.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(<span class="at">w =</span> w_old[w_old<span class="sc">&gt;</span><span class="dv">0</span>], <span class="at">G =</span> G[w_old<span class="sc">&gt;</span><span class="dv">0</span>,w_old<span class="sc">&gt;</span><span class="dv">0</span>],  <span class="at">r2 =</span> r2_old, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(deltautr <span class="sc">-</span> res_old<span class="sc">$</span>d_G_exp_scaled, <span class="dv">3</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    RZM    RZN   RZEo    RZR   RZKm    RZS </span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.007 -0.007  0.022  0.027 -0.031 -0.018</span></span></code></pre></div>
+<p>This shows us that the resulting trend matches the expected well with
+probably slightly more weight on exterior (“RZEo”) and reproduction
+(“RZR”).</p>
+<p>We can also check what this meant for the economic and index weights
+by calculating “realized weights” given the observed gains</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>res_old <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">w =</span> w_old[w_old<span class="sc">&gt;</span><span class="dv">0</span>],</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">G =</span> G[w_old<span class="sc">&gt;</span><span class="dv">0</span>, w_old<span class="sc">&gt;</span><span class="dv">0</span>],</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">r2 =</span> r2_old,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_G_obs =</span> deltautr,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>w_real <span class="sc">-</span> res_old<span class="sc">$</span>w, <span class="dv">2</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo   RZR  RZKm   RZS </span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -0.05 -0.11  0.03  0.12 -0.10 -0.03</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>b_real <span class="sc">-</span> res_old<span class="sc">$</span>b_scaled, <span class="dv">2</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo   RZR  RZKm   RZS </span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -0.01 -0.05  0.04  0.10 -0.08 -0.03</span></span></code></pre></div>
+<p>This reveals that there was effectively slightly more weight on
+“RZEo” and “RZR” in practical breeding decisions than suggested by the
+index.</p>
+</div>
+<div id="correlated-residuals" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Correlated
+residuals</h2>
+<p>The previous section assumed uncorrelated residual errors, which
+might not hold in reality. <code>SelInd()</code> therefore also allows
+to include the residual variance-covariance matrix of the traits
+(<code>H</code>).</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>res_old_corRes <span class="ot">&lt;-</span> <span class="fu">SelInd</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">w =</span> w_old[w_old<span class="sc">&gt;</span><span class="dv">0</span>],</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">G =</span> G[w_old<span class="sc">&gt;</span><span class="dv">0</span>, w_old<span class="sc">&gt;</span><span class="dv">0</span>],</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">r2 =</span> r2_old,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_G_obs =</span> deltautr,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> H,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Modelling those residual correlations between the traits actually
+increases the fit between expectation and observation:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old<span class="sc">$</span>w_real <span class="sc">-</span> res_old<span class="sc">$</span>w, <span class="dv">2</span>) <span class="co"># uncorrelated residuals</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo   RZR  RZKm   RZS </span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -0.05 -0.11  0.03  0.12 -0.10 -0.03</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(res_old_corRes<span class="sc">$</span>w_real <span class="sc">-</span> res_old_corRes<span class="sc">$</span>w, <span class="dv">2</span>) <span class="co"># correlated residuals</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   RZM   RZN  RZEo   RZR  RZKm   RZS </span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -0.05 -0.06  0.01  0.08 -0.08  0.00</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
